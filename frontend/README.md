@@ -1,16 +1,49 @@
-# React + Vite
+# 🎮 Mi Backlog Personal
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación full-stack para gestionar mi colección personal de videojuegos.
+Construida con React + Express como proyecto final de STW 2026 — UVG.
 
-Currently, two official plugins are available:
+## 📸 Vista de la aplicación
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## React Compiler
+## 🛠️ Stack tecnológico
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend:** React 18 + Vite, useState, useEffect
+- **Backend:** Node.js + Express
+- **Base de datos:** SQLite (better-sqlite3)
+- **Estilos:** CSS puro
+- **Control de versiones:** Git + GitHub
 
-## Expanding the ESLint configuration
+## 🚀 Cómo correr el proyecto localmente
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Backend
+```bash
+cd backend
+npm install
+node src/index.js
+```
+
+## 🎮 Mi colección
+
+Tema elegido: **Videojuegos — Backlog personal**
+
+Categorías disponibles:
+- ⚔️ RPG
+- 💥 Acción  
+- ♟️ Estrategia
+- 🎨 Indie
+- ⚽ Deportes
+
+## 👤 Mi información 
+
+- **Nombre:** Reynaldo
+- **Carné:** 241071
+- **Universidad:** Universidad del Valle de Guatemala
+- **Curso:** Sistemas y Tecnologías Web 2026

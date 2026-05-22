@@ -1,0 +1,38 @@
+/* Variables CSS para tema claro */
+body[data-theme="claro"] {
+  --color-fondo: #f7f7f8;
+  --color-superficie: #ffffff;
+  --color-texto: #1a1a1a;
+  --color-texto-secundario: #6b7280;
+  --color-acento: #4f46e5;
+  --color-acento-hover: #4338ca;
+  --color-borde: #e5e7eb;
+  --color-peligro: #e05a5a;
+  --color-exito: #5a9e6f;
+}
+
+/* Variables CSS para tema oscuro */
+body[data-theme="oscuro"] {
+  --color-fondo: #0f172a;
+  --color-superficie: #1e293b;
+  --color-texto: #f1f5f9;
+  --color-texto-secundario: #94a3b8;
+  --color-acento: #818cf8;
+  --color-acento-hover: #6366f1;
+  --color-borde: #334155;
+  --color-peligro: #f87171;
+  --color-exito: #6ee7b7;
+}
+
+/* Estilos base que usan las variables */
+body {
+  background: var(--color-fondo);
+  color: var(--color-texto);
+  font-family: system-ui, sans-serif;
+  transition: background 0.2s, color 0.2s;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}

@@ -1,7 +1,7 @@
 /* Variables CSS para tema claro */
 body[data-theme="claro"] {
   --color-fondo: #f7f7f8;
-  --color-superficie: #ffffff;
+  --color-superficie: #969696;
   --color-texto: #1a1a1a;
   --color-texto-secundario: #6b7280;
   --color-acento: #4f46e5;

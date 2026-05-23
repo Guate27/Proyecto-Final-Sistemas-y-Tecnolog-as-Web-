@@ -1,3 +1,4 @@
+// frontend/src/App.jsx
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useStorage } from './context/StorageProvider'
 import { useTema } from './context/ThemeContext'
@@ -8,9 +9,13 @@ function App() {
   const { obtenerItems, guardarItem, eliminarItem, cargando, error } = useStorage()
   const { tema, toggleTema } = useTema()
   const [juegos, setJuegos] = useState([])
+  const [tiempoSesion, setTiempoSesion] = useState(0)
 
-  // useRef para enfocar el input después de agregar un juego
+  // useRef uso 1: enfocar el input después de agregar un juego
   const inputRef = useRef(null)
+
+  // useRef uso 2: guardar el ID del intervalo sin provocar re-renders
+  const intervaloRef = useRef(null)
 
   // Carga los juegos al montar el componente
   useEffect(() => {
@@ -20,6 +25,15 @@ function App() {
     }
     cargarJuegos()
   }, [obtenerItems])
+
+  // Inicia un contador de tiempo de sesión al montar el componente
+  useEffect(() => {
+    intervaloRef.current = setInterval(() => {
+      setTiempoSesion(t => t + 1)
+    }, 1000)
+    // Cleanup: detiene el intervalo cuando el componente se desmonta
+    return () => clearInterval(intervaloRef.current)
+  }, [])
 
   // Agrega un juego nuevo al sistema
   const agregarJuego = useCallback(async (nuevoJuego) => {
@@ -46,14 +60,13 @@ function App() {
     )
   }, [])
 
-  // Atajo de teclado Ctrl+N para enfocar el input de agregar
+  // Atajos de teclado: Ctrl+N enfoca el input, T cambia el tema
   useEffect(() => {
     function manejarAtajo(e) {
       if (e.ctrlKey && e.key === 'n') {
         e.preventDefault()
         inputRef.current?.focus()
       }
-      // Atajo T para cambiar tema
       if (e.key === 't' || e.key === 'T') {
         const enInput = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)
         if (!enInput) toggleTema()
@@ -69,15 +82,20 @@ function App() {
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '24px' }}>
 
-      {/* Encabezado con botón de tema */}
+      {/* Encabezado con botón de tema y contador de sesión */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h1 style={{ margin: 0 }}>🎮 Mi Backlog Personal</h1>
-        <button
-          onClick={toggleTema}
-          style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid var(--color-borde)', background: 'var(--color-superficie)', color: 'var(--color-texto)', cursor: 'pointer' }}
-        >
-          {tema === 'claro' ? '🌙 Oscuro' : '☀️ Claro'}
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <span style={{ fontSize: '13px', color: 'var(--color-texto-secundario)' }}>
+            ⏱️ Sesión: {tiempoSesion}s
+          </span>
+          <button
+            onClick={toggleTema}
+            style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid var(--color-borde)', background: 'var(--color-superficie)', color: 'var(--color-texto)', cursor: 'pointer' }}
+          >
+            {tema === 'claro' ? '🌙 Oscuro' : '☀️ Claro'}
+          </button>
+        </div>
       </div>
 
       {/* Mensaje de error si algo falla */}

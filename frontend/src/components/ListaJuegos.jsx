@@ -1,12 +1,11 @@
-// src/components/ListaJuegos.jsx
 import JuegoCard from './JuegoCard'
 
 function ListaJuegos({ juegos, onEliminar, onCambiarEstado }) {
 
-  // Si no hay juegos, mostramos un mensaje
+  // Si no hay juegos activos muestra un mensaje vacío
   if (juegos.length === 0) {
     return (
-      <div style={{ textAlign: 'center', padding: '40px', color: '#888' }}>
+      <div style={{ textAlign: 'center', padding: '40px', color: 'var(--color-texto-secundario)' }}>
         <p>🎮 Tu backlog está vacío. ¡Agrega tu primer juego!</p>
       </div>
     )
@@ -14,7 +13,9 @@ function ListaJuegos({ juegos, onEliminar, onCambiarEstado }) {
 
   return (
     <div>
-      <h2>📋 Mi Backlog ({juegos.length} juegos)</h2>
+      <h2 style={{ color: 'var(--color-texto)' }}>
+        📋 Mi Backlog ({juegos.length} juegos)
+      </h2>
       {juegos.map(juego => (
         <JuegoCard
           key={juego.id}

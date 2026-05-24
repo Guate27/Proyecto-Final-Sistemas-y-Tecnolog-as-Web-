@@ -43,7 +43,7 @@ Categorías disponibles:
 
 ## Mi información 
 
-- **Nombre:** Reynaldo
+- **Nombre:** Julio Reynaldo Pellecer Morales 
 - **Carné:** 241071
 - **Universidad:** Universidad del Valle de Guatemala
 - **Curso:** Sistemas y Tecnologías Web 2026

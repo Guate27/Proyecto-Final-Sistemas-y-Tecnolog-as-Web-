@@ -1,4 +1,3 @@
-// frontend/src/App.jsx
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useStorage } from './context/StorageProvider'
 import { useTema } from './context/ThemeContext'
@@ -6,7 +5,7 @@ import FormularioJuego from './components/FormularioJuego'
 import ListaJuegos from './components/ListaJuegos'
 
 function App() {
-  const { obtenerItems, guardarItem, eliminarItem, cargando, error } = useStorage()
+  const { obtenerItems, guardarItem, eliminarItem, cargando, error, modo, setModo } = useStorage()
   const { tema, toggleTema } = useTema()
   const [juegos, setJuegos] = useState([])
   const [tiempoSesion, setTiempoSesion] = useState(0)
@@ -17,14 +16,17 @@ function App() {
   // useRef uso 2: guardar el ID del intervalo sin provocar re-renders
   const intervaloRef = useRef(null)
 
-  // Carga los juegos al montar el componente
+  // useRef uso 3: referencia al último juego agregado para scroll automático
+  const ultimoJuegoRef = useRef(null)
+
+  // Carga los juegos al montar el componente y cuando cambia el modo
   useEffect(() => {
     async function cargarJuegos() {
       const data = await obtenerItems()
       setJuegos(data)
     }
     cargarJuegos()
-  }, [obtenerItems])
+  }, [obtenerItems, modo])
 
   // Inicia un contador de tiempo de sesión al montar el componente
   useEffect(() => {
@@ -42,6 +44,10 @@ function App() {
     setJuegos(data)
     // Enfoca el input después de agregar
     inputRef.current?.focus()
+    // Scroll automático al último juego agregado
+    setTimeout(() => {
+      ultimoJuegoRef.current?.scrollIntoView({ behavior: 'smooth' })
+    }, 100)
   }, [guardarItem, obtenerItems])
 
   // Archiva un juego (activo = false)
@@ -82,16 +88,38 @@ function App() {
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '24px' }}>
 
-      {/* Encabezado con botón de tema y contador de sesión */}
+      {/* Encabezado con botones de modo, tema y contador de sesión */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h1 style={{ margin: 0 }}>🎮 Mi Backlog Personal</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <span style={{ fontSize: '13px', color: 'var(--color-texto-secundario)' }}>
             ⏱️ Sesión: {tiempoSesion}s
           </span>
+          {/* Toggle modo API vs localStorage */}
+          <button
+            onClick={() => setModo(modo === 'local' ? 'api' : 'local')}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '8px',
+              border: '1px solid var(--color-borde)',
+              background: modo === 'api' ? 'var(--color-acento)' : 'var(--color-superficie)',
+              color: modo === 'api' ? 'white' : 'var(--color-texto)',
+              cursor: 'pointer'
+            }}
+          >
+            {modo === 'api' ? '🌐 API' : '💾 Local'}
+          </button>
+          {/* Toggle tema claro/oscuro */}
           <button
             onClick={toggleTema}
-            style={{ padding: '8px 16px', borderRadius: '8px', border: '1px solid var(--color-borde)', background: 'var(--color-superficie)', color: 'var(--color-texto)', cursor: 'pointer' }}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '8px',
+              border: '1px solid var(--color-borde)',
+              background: 'var(--color-superficie)',
+              color: 'var(--color-texto)',
+              cursor: 'pointer'
+            }}
           >
             {tema === 'claro' ? '🌙 Oscuro' : '☀️ Claro'}
           </button>
@@ -114,6 +142,7 @@ function App() {
         juegos={juegosActivos}
         onEliminar={eliminarJuego}
         onCambiarEstado={cambiarEstado}
+        ultimoJuegoRef={ultimoJuegoRef}
       />
 
     </div>

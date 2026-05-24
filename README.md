@@ -55,8 +55,8 @@ Categorías disponibles:
 
 - | `--color-fondo` | `#f7f7f8` | Tonalidad de gris 
 - | `--color-superficie` | `#f0f0f2` | Un poco más oscuro que el fondo para distinguir tarjetas y formularios 
-- | `--color-texto` | `#1a1a1a` | Negro para que sea más fácil de distinguir|
-- | `--color-texto-secundario` | `#6b7280` | Gris medio para información secundaria sin competir  
+- | `--color-texto` | `#1a1a1a` | Negro para que sea más fácil de distinguir
+- | `--color-texto-secundario` | `#6b7280` | Gris medio para información secundaria   
 - | `--color-acento` | `#4f46e5` |Morado
 - | `--color-borde` | `#e5e7eb` | Gris para definir los límites del contenido 
 

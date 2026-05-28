@@ -1,4 +1,3 @@
-
 // Estado inicial del reducer
 export const initialState = {
   lista: [],
@@ -19,15 +18,11 @@ export function itemsReducer(state, action) {
     case 'AGREGAR':
       return { ...state, lista: [...state.lista, action.payload] }
 
-    // Archiva un juego marcándolo como inactivo
+    // Elimina el juego completamente del array
     case 'ELIMINAR':
       return {
         ...state,
-        lista: state.lista.map(item =>
-          item.id === action.payload
-            ? { ...item, activo: false }
-            : item
-        )
+        lista: state.lista.filter(item => item.id !== action.payload)
       }
 
     // Actualiza el estado de un juego (pendiente, jugando, completado, abandonado)

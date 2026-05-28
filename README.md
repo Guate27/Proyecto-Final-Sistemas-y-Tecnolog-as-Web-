@@ -15,7 +15,7 @@ Construida con React + Express como proyecto final de STW 2026 — UVG.
 - **Estilos: CSS puro
 - Control de versiones: Git + GitHub
 
-##  Cómo correr el proyecto localmente
+## 🚀 Cómo correr el proyecto localmente
 
 ### Frontend
 ```bash
@@ -31,7 +31,7 @@ npm install
 node src/index.js
 ```
 
-## Mi colección
+## 🎮 Mi colección
 
 Tema elegido: **Videojuegos — Backlog personal**
 
@@ -42,7 +42,7 @@ Categorías disponibles:
 - 🎨 Indie
 - ⚽ Deportes
 
-## Mi información 
+## 👤 Mi información 
 
 - **Nombre:** Julio Reynaldo Pellecer Morales 
 - **Carné:** 241071
@@ -50,7 +50,7 @@ Categorías disponibles:
 - **Curso:** Sistemas y Tecnologías Web 2026
 
 
-  ## Mi paleta de colores
+  ## 🎨 Mi paleta de colores
 
 ### Tema claro
 

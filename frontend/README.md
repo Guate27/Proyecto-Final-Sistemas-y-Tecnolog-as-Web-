@@ -4,6 +4,7 @@ Aplicación full-stack para gestionar mi colección personal de videojuegos.
 Construida con React + Express como proyecto final de STW 2026 — UVG.
 
 ## 📸 Vista de la aplicación
+<img width="1843" height="859" alt="Captura de pantalla 2026-05-18 014712" src="https://github.com/user-attachments/assets/67b9ff4a-1f59-4c22-ba9e-68273fc7f971" />
 
 
 ## 🛠️ Stack tecnológico

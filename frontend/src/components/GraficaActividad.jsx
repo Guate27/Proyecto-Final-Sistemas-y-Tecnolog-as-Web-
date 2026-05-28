@@ -1,10 +1,8 @@
-// Gráfica 1: BarChart que muestra los juegos agregados en los últimos 7 días
 import { useMemo } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 
-function GraficaActividad({ lista }) {
+function GraficaActividad({ listaFiltrada }) {
 
-  // Calcula los datos de los últimos 7 días con useMemo
   const datos = useMemo(() => {
     const hoy = new Date()
     const ultimos7Dias = Array.from({ length: 7 }, (_, i) => {
@@ -17,28 +15,27 @@ function GraficaActividad({ lista }) {
       }
     })
 
-    // Conteo de cuántos juegos fueron registrados cada día
-    lista.forEach(item => {
+    listaFiltrada.forEach(item => {
       const fechaItem = item.fechaRegistro?.split('T')[0]
       const dia = ultimos7Dias.find(d => d.fechaISO === fechaItem)
       if (dia) dia.juegos += 1
     })
 
     return ultimos7Dias
-  }, [lista])
+  }, [listaFiltrada])
 
   return (
     <div style={{ background: 'var(--color-superficie)', borderRadius: '8px', padding: '16px', border: '1px solid var(--color-borde)' }}>
       <h3 style={{ margin: '0 0 16px', color: 'var(--color-texto)' }}>📅 Juegos agregados — últimos 7 días</h3>
       <ResponsiveContainer width="100%" height={220}>
-        <BarChart data={datos}>
+        <BarChart data={datos} margin={{ top: 5, right: 10, left: -10, bottom: 5 }}>
           <XAxis dataKey="fecha" tick={{ fill: 'var(--color-texto-secundario)', fontSize: 11 }} />
           <YAxis allowDecimals={false} tick={{ fill: 'var(--color-texto-secundario)', fontSize: 11 }} />
           <Tooltip
             contentStyle={{ background: 'var(--color-superficie)', border: '1px solid var(--color-borde)', color: 'var(--color-texto)' }}
           />
           <Legend />
-          <Bar dataKey="juegos" name="Juegos agregados" fill="var(--color-acento)" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="juegos" name="Juegos agregados" fill="#7F77DD" />
         </BarChart>
       </ResponsiveContainer>
     </div>

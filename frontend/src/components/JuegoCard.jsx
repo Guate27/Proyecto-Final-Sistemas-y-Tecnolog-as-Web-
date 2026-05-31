@@ -1,4 +1,4 @@
-// frontend/src/components/JuegoCard.jsx
+import React from 'react'
 import { CATEGORIAS } from '../utils/categorias'
 
 function JuegoCard({ juego, onEliminar, onCambiarEstado }) {
@@ -80,4 +80,5 @@ function JuegoCard({ juego, onEliminar, onCambiarEstado }) {
   )
 }
 
-export default JuegoCard
+// React.memo evita re-renders innecesarios cuando las props no cambian
+export default React.memo(JuegoCard)

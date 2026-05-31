@@ -1,11 +1,9 @@
-// frontend/src/context/StorageProvider.jsx
 import { createContext, useContext, useState, useCallback } from 'react'
+import useFetch from '../hooks/useFetch'
 
-// Contexto global para abstraer el origen de los datos
 export const StorageContext = createContext()
 
 export function StorageProvider({ children }) {
-  // Inicializa el modo desde localStorage, por defecto 'local'
   const [modo, setModoState] = useState(() =>
     localStorage.getItem('modo') || 'local'
   )
@@ -14,34 +12,28 @@ export function StorageProvider({ children }) {
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
 
-  // Persiste el modo seleccionado en localStorage
+  // useFetch se activa automáticamente cuando modo es 'api'
+  // Si modo es 'local', le pasamos null y el hook no hace nada
+  const { data: itemsApi, loading: cargandoApi, error: errorApi } = useFetch(
+    modo === 'api' ? `${API_URL}/api/items` : null
+  )
+
   function setModo(nuevoModo) {
     setModoState(nuevoModo)
     localStorage.setItem('modo', nuevoModo)
   }
 
-  // Obtiene todos los juegos activos según el modo actual
+  // Ahora obtenerItems usa los datos que useFetch ya trajo
   const obtenerItems = useCallback(async () => {
-    setCargando(true)
-    setError(null)
-    try {
-      if (modo === 'api') {
-        const res = await fetch(`${API_URL}/api/items`)
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return await res.json()
-      } else {
-        const data = localStorage.getItem('juegos')
-        return data ? JSON.parse(data) : []
-      }
-    } catch (err) {
-      setError(err.message)
-      return []
-    } finally {
-      setCargando(false)
+    if (modo === 'api') {
+      if (errorApi) { setError(errorApi); return [] }
+      return itemsApi || []
+    } else {
+      const data = localStorage.getItem('juegos')
+      return data ? JSON.parse(data) : []
     }
-  }, [modo])
+  }, [modo, itemsApi, errorApi])
 
-  // Guarda un juego nuevo o actualiza uno existente según el modo actual
   const guardarItem = useCallback(async (juego) => {
     setCargando(true)
     setError(null)
@@ -68,7 +60,6 @@ export function StorageProvider({ children }) {
     }
   }, [modo])
 
-  // Archiva un juego (activo = false) según el modo actual
   const eliminarItem = useCallback(async (id) => {
     setCargando(true)
     setError(null)
@@ -95,7 +86,9 @@ export function StorageProvider({ children }) {
 
   return (
     <StorageContext.Provider value={{
-      modo, setModo, cargando, error,
+      modo, setModo,
+      cargando: cargando || cargandoApi,
+      error: error || errorApi,
       obtenerItems, guardarItem, eliminarItem,
     }}>
       {children}
@@ -103,7 +96,6 @@ export function StorageProvider({ children }) {
   )
 }
 
-// Hook personalizado para consumir el StorageContext en cualquier componente
 export function useStorage() {
   return useContext(StorageContext)
 }

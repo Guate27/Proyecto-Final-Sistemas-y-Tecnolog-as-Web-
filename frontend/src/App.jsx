@@ -4,6 +4,7 @@ import { useTema } from './context/ThemeContext'
 import { itemsReducer, initialState } from './reducers/itemsReducer'
 import { crearJuego } from './utils/juegos'
 import useAtajoTeclado from './hooks/useAtajoTeclado'
+import useEstadisticasBacklog from './hooks/useEstadisticasBacklog'
 import FormularioJuego from './components/FormularioJuego'
 import ListaJuegos from './components/ListaJuegos'
 import Filtros from './components/Filtros'
@@ -39,14 +40,17 @@ function App() {
 
   // Lista filtrada con useMemo — solo recalcula si cambian lista o filtros
   const listaFiltrada = useMemo(() => {
-  return lista.filter(item => {
-    if (!item.activo) return false
-    if (filtroCategoria !== 'todas' && item.categoriaId !== filtroCategoria) return false
-    if (filtroEstado !== 'todos' && item.estado !== filtroEstado) return false
-    if (busqueda && !item.nombre.toLowerCase().includes(busqueda.toLowerCase())) return false
-    return true
-  })
+    return lista.filter(item => {
+      if (!item.activo) return false
+      if (filtroCategoria !== 'todas' && item.categoriaId !== filtroCategoria) return false
+      if (filtroEstado !== 'todos' && item.estado !== filtroEstado) return false
+      if (busqueda && !item.nombre.toLowerCase().includes(busqueda.toLowerCase())) return false
+      return true
+    })
   }, [lista, filtroCategoria, filtroEstado, busqueda])
+
+  // Estadísticas calculadas con nuestro hook de dominio
+  const stats = useEstadisticasBacklog(lista)
 
   const agregarJuego = useCallback(async (nuevoJuego) => {
     await guardarItem(nuevoJuego)
@@ -101,6 +105,35 @@ function App() {
       )}
 
       {cargando && <p style={{ color: 'var(--color-texto-secundario)' }}>Cargando...</p>}
+
+      {/* Estadísticas del backlog usando hook de dominio */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+        gap: '12px',
+        marginBottom: '20px'
+      }}>
+        <div style={{ background: 'var(--color-superficie)', padding: '16px', borderRadius: '8px', border: '1px solid var(--color-borde)' }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-texto-secundario)' }}>📚 Total</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{stats.total}</div>
+        </div>
+        <div style={{ background: 'var(--color-superficie)', padding: '16px', borderRadius: '8px', border: '1px solid var(--color-borde)' }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-texto-secundario)' }}>✅ Completados</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{stats.completados}</div>
+        </div>
+        <div style={{ background: 'var(--color-superficie)', padding: '16px', borderRadius: '8px', border: '1px solid var(--color-borde)' }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-texto-secundario)' }}>🎮 Jugando</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{stats.jugando}</div>
+        </div>
+        <div style={{ background: 'var(--color-superficie)', padding: '16px', borderRadius: '8px', border: '1px solid var(--color-borde)' }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-texto-secundario)' }}>⏱️ Horas</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{stats.horasTotales}</div>
+        </div>
+        <div style={{ background: 'var(--color-superficie)', padding: '16px', borderRadius: '8px', border: '1px solid var(--color-borde)' }}>
+          <div style={{ fontSize: '12px', color: 'var(--color-texto-secundario)' }}>📊 Progreso</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{stats.porcentajeCompletado}%</div>
+        </div>
+      </div>
 
       {/* Dashboard con gráficas — solo recibe listaFiltrada */}
       <Dashboard listaFiltrada={listaFiltrada} />

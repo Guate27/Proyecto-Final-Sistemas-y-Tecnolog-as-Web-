@@ -3,6 +3,7 @@ import { useStorage } from './context/StorageProvider'
 import { useTema } from './context/ThemeContext'
 import { itemsReducer, initialState } from './reducers/itemsReducer'
 import { crearJuego } from './utils/juegos'
+import useAtajoTeclado from './hooks/useAtajoTeclado'
 import FormularioJuego from './components/FormularioJuego'
 import ListaJuegos from './components/ListaJuegos'
 import Filtros from './components/Filtros'
@@ -65,20 +66,9 @@ function App() {
     dispatch({ type: 'CAMBIAR_ESTADO', payload: { id, estado } })
   }, [])
 
-  useEffect(() => {
-    function manejarAtajo(e) {
-      if (e.ctrlKey && e.key === 'n') {
-        e.preventDefault()
-        inputRef.current?.focus()
-      }
-      if (e.key === 't' || e.key === 'T') {
-        const enInput = ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)
-        if (!enInput) toggleTema()
-      }
-    }
-    window.addEventListener('keydown', manejarAtajo)
-    return () => window.removeEventListener('keydown', manejarAtajo)
-  }, [toggleTema])
+  // Atajos de teclado usando nuestro custom hook
+  useAtajoTeclado('k', () => inputRef.current?.focus(), { ctrl: true })
+  useAtajoTeclado('t', toggleTema)
 
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto', padding: '24px' }}>

@@ -6,9 +6,9 @@ import { crearJuego } from './utils/juegos'
 import useAtajoTeclado from './hooks/useAtajoTeclado'
 import useEstadisticasBacklog from './hooks/useEstadisticasBacklog'
 import FormularioJuego from './components/FormularioJuego'
-import ListaJuegosKanban from './components/ListaJuegos'
 import Filtros from './components/Filtros'
 import Dashboard from './components/Dashboard'
+import ListaJuegos from './components/ListaJuegos'
 
 function App() {
   // Funciones para manejar el almacenamiento (API o LocalStorage)
@@ -95,6 +95,12 @@ function App() {
     dispatch({ type: 'CAMBIAR_ESTADO', payload: { id, estado } })
   }, [lista, actualizarItem])
 
+  // Edita un juego existente con los datos modificados desde el modal
+  const editarJuego = useCallback(async (juegoEditado) => {
+    await actualizarItem(juegoEditado)
+    dispatch({ type: 'EDITAR', payload: juegoEditado })
+  }, [actualizarItem])
+
   // Atajos de teclado: Ctrl+K para poner el cursor en e input, T para cambiar el tema
   useAtajoTeclado('k', () => inputRef.current?.focus(), { ctrl: true })
   useAtajoTeclado('t', toggleTema)
@@ -180,10 +186,11 @@ function App() {
       />
 
       {/* Lista de juegos en formato de tarjetas con grilla de 4 columnas */}
-      <ListaJuegosKanban
+      <ListaJuegos
         juegos={listaFiltrada}
         onEliminar={eliminarJuego}
         onCambiarEstado={cambiarEstado}
+        onEditar={editarJuego}
         ultimoJuegoRef={ultimoJuegoRef}
       />
 

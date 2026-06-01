@@ -34,7 +34,7 @@ router.get('/:id', (req, res) => {
 
 // POST /api/items — crea un juego nuevo
 router.post('/', (req, res) => {
-  const { nombre, categoriaId, estado = 'pendiente', atributos = {} } = req.body
+  const { nombre, categoriaId, estado = 'pendiente', atributos = {}, imagen = '' } = req.body
   if (!nombre || nombre.trim().length < 3)
     return res.status(400).json({ error: 'El nombre debe tener al menos 3 caracteres' })
   try {
@@ -47,14 +47,15 @@ router.post('/', (req, res) => {
       fechaRegistro: new Date().toISOString(),
       fechaActividad: new Date().toISOString(),
       notas: req.body.notas || '',
+      imagen,
       atributos: JSON.stringify(atributos),
       activo: 1,
     }
     db.prepare(`
       INSERT INTO items 
-        (id, nombre, categoriaId, estado, puntuacion, fechaRegistro, fechaActividad, notas, atributos, activo)
+        (id, nombre, categoriaId, estado, puntuacion, fechaRegistro, fechaActividad, notas, imagen, atributos, activo)
       VALUES 
-        (@id, @nombre, @categoriaId, @estado, @puntuacion, @fechaRegistro, @fechaActividad, @notas, @atributos, @activo)
+        (@id, @nombre, @categoriaId, @estado, @puntuacion, @fechaRegistro, @fechaActividad, @notas, @imagen, @atributos, @activo)
     `).run(nuevo)
     res.status(201).json({ ...nuevo, activo: true, atributos })
   } catch (err) {
@@ -64,7 +65,7 @@ router.post('/', (req, res) => {
 
 // PUT /api/items/:id — actualiza un juego
 router.put('/:id', (req, res) => {
-  const { nombre, estado, puntuacion, notas, atributos } = req.body
+  const { nombre, estado, puntuacion, notas, atributos, imagen } = req.body
   try {
     const info = db.prepare(`
       UPDATE items SET
@@ -72,6 +73,7 @@ router.put('/:id', (req, res) => {
         estado = COALESCE(@estado, estado),
         puntuacion = COALESCE(@puntuacion, puntuacion),
         notas = COALESCE(@notas, notas),
+        imagen = COALESCE(@imagen, imagen),
         atributos = COALESCE(@atributos, atributos),
         fechaActividad = @fechaActividad
       WHERE id = @id
@@ -81,6 +83,7 @@ router.put('/:id', (req, res) => {
       estado: estado || null,
       puntuacion: puntuacion || null,
       notas: notas || null,
+      imagen: imagen !== undefined ? imagen : null,
       atributos: atributos ? JSON.stringify(atributos) : null,
       fechaActividad: new Date().toISOString(),
     })

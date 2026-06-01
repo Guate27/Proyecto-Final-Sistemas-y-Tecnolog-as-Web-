@@ -1,9 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { CATEGORIAS } from '../utils/categorias'
+import ModalEditarJuego from './ModalEditarJuego'
 
-function JuegoCard({ juego, onEliminar, onCambiarEstado }) {
+// Tarjeta individual que muestra los datos de un juego y permite interactuar con él
+function JuegoCard({ juego, onEliminar, onCambiarEstado, onEditar }) {
+
   // Busca la categoría del juego para mostrar su emoji y color
   const categoria = CATEGORIAS.find(c => c.id === juego.categoriaId)
+
+  // Controla si el modal de edición está abierto o cerrado
+  const [modalAbierto, setModalAbierto] = useState(false)
+
+  // Detecta si la imagen es horizontal o vertical para ajustar el contenedor
+  const [orientacionImagen, setOrientacionImagen] = useState('horizontal')
 
   return (
     <div style={{
@@ -29,6 +38,28 @@ function JuegoCard({ juego, onEliminar, onCambiarEstado }) {
           {categoria?.nombre}
         </span>
       </div>
+      {/* Imagen del juego (solo se muestra si hay URL definida) */}
+      {/* El contenedor cambia de altura según si la imagen es vertical u horizontal */}
+      {juego.imagen && (
+        <img
+          src={juego.imagen}
+          alt={juego.nombre}
+          onLoad={(e) => {
+            // Compara dimensiones reales para definir la orientación
+            const { naturalWidth, naturalHeight } = e.target
+            setOrientacionImagen(naturalHeight > naturalWidth ? 'vertical' : 'horizontal')
+            }}
+          onError={(e) => { e.target.style.display = 'none' }}
+          style={{
+            width: '100%',
+            height: orientacionImagen === 'vertical' ? '280px' : '140px' ,
+            objectFit: 'cover',
+            borderRadius: '6px',
+            marginTop: '12px',
+            border: '1px solid var(--color-borde)'
+          }}
+        />
+      )}
 
       {/* Detalles del juego */}
       <p style={{ margin: '8px 0 4px', color: 'var(--color-texto)' }}>
@@ -61,6 +92,22 @@ function JuegoCard({ juego, onEliminar, onCambiarEstado }) {
         <option value="abandonado">Abandonado</option>
       </select>
 
+      {/* Botón para abrir el modal de edición */}
+      <button
+        onClick={() => setModalAbierto(true)}
+        style={{
+          padding: '4px 12px',
+          marginRight: '8px',
+          background: 'var(--color-acento)',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        }}
+      >
+        ✏️ Editar
+      </button>
+
       {/* Botón eliminar */}
       <button
         onClick={() => onEliminar(juego.id)}
@@ -75,6 +122,15 @@ function JuegoCard({ juego, onEliminar, onCambiarEstado }) {
       >
         🗑️ Eliminar
       </button>
+
+      {/* Renderizar el modal solo cuando está abierto */}
+      {modalAbierto && (
+        <ModalEditarJuego
+          juego={juego}
+          onGuardar={onEditar}
+          onCerrar={() => setModalAbierto(false)}
+        />
+      )}
 
     </div>
   )

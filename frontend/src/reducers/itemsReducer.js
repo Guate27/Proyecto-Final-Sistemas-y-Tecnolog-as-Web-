@@ -1,4 +1,5 @@
 // Estado inicial del reducer
+// Contiene la lista de juegos y los filtros actualmente aplicados
 export const initialState = {
   lista: [],
   filtroCategoria: 'todas',
@@ -6,41 +7,54 @@ export const initialState = {
   busqueda: '',
 }
 
-// Función que devuelve un estado sin modificar el anterior
+// Reducer que maneja todas las acciones sobre la lista de juegos y los filtros
+// Siempre devuelve un nuevo estado sin modificar el anterior
 export function itemsReducer(state, action) {
   switch (action.type) {
 
-    // Carga inicial de juegos desde API o localStorage
+    // Carga inicial de juegos desde la API o LocalStorage
     case 'HIDRATAR':
       return { ...state, lista: action.payload }
 
-    // Agrega un nuevo juego al array
+    // Agrega un juego nuevo al array y le pone fechaActividad actual
+    // Esto hace que el juego aparezca al inicio del orden por interacción
     case 'AGREGAR':
-      return { ...state, lista: [...state.lista, action.payload] }
+      return {
+        ...state,
+        lista: [
+          ...state.lista,
+          { ...action.payload, fechaActividad: new Date().toISOString() }
+        ]
+      }
 
-    // Elimina el juego completamente del array
+    // Elimina un juego del array según su id
     case 'ELIMINAR':
       return {
         ...state,
         lista: state.lista.filter(item => item.id !== action.payload)
       }
 
-    // Actualiza el estado de un juego (pendiente, jugando, completado, abandonado)
+    // Cambia el estado de un juego (pendiente, jugando, completado, abandonado)
+    // Actualiza fechaActividad para que el juego suba al inicio del orden
     case 'CAMBIAR_ESTADO':
       return {
         ...state,
         lista: state.lista.map(item =>
           item.id === action.payload.id
-            ? { ...item, estado: action.payload.estado }
+            ? {
+                ...item,
+                estado: action.payload.estado,
+                fechaActividad: new Date().toISOString()
+              }
             : item
         )
       }
 
-    // Actualiza un filtro activo (categoría, estado o búsqueda)
+    // Actualiza uno o varios filtros a la vez (categoría, estado o búsqueda)
     case 'FILTRAR':
       return { ...state, ...action.payload }
 
-    // Resetea todos los filtros a sus valores iniciales
+    // Restaura todos los filtros a sus valores iniciales
     case 'LIMPIAR_FILTROS':
       return {
         ...state,
@@ -49,7 +63,8 @@ export function itemsReducer(state, action) {
         busqueda: '',
       }
 
-    // Agrega un registro de actividad al historial de un juego
+    // Suma horas al campo horasTotales de un juego y actualiza su fechaActividad
+    // Usa spread en dos fases para no mutar el objeto anidado de atributos
     case 'REGISTRAR_ACTIVIDAD':
       return {
         ...state,

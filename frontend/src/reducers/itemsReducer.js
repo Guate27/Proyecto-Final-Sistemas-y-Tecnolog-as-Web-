@@ -49,6 +49,15 @@ export function itemsReducer(state, action) {
             : item
         )
       }
+      
+    // Reemplaza un juego existente con su versión actualizada desde el modal
+    case 'EDITAR':
+      return {
+        ...state,
+        lista: state.lista.map(item =>
+          item.id === action.payload.id ? action.payload : item
+        )
+      }  
 
     // Actualiza uno o varios filtros a la vez (categoría, estado o búsqueda)
     case 'FILTRAR':

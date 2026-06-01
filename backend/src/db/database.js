@@ -14,6 +14,7 @@ db.exec(`
     fechaRegistro  TEXT NOT NULL,
     fechaActividad TEXT,
     notas          TEXT DEFAULT '',
+    imagen         TEXT DEFAULT '',
     atributos      TEXT DEFAULT '{}',
     activo         INTEGER DEFAULT 1
   );

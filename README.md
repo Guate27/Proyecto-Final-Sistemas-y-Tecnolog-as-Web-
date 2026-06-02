@@ -162,7 +162,7 @@ Se puede comprobar que el backend está funcionando accediendo directamente a:
 - Estado del servidor: [backlog-personal-backend.onrender.com/health](https://backlog-personal-backend.onrender.com/health)
 - Listado de juegos: [backlog-personal-backend.onrender.com/api/items](https://backlog-personal-backend.onrender.com/api/items)
 
-### - Funcionalidades disponibles para probar
+### Funcionalidades disponibles para probar
 - Agregar un juego nuevo con nombre, categoría, plataforma, horas jugadas e imagen
 - Editar cualquier juego ya creado mediante el botón ✏️ Editar
 - Cambiar el estado de un juego (pendiente, jugando, completado, abandonado)
@@ -170,6 +170,8 @@ Se puede comprobar que el backend está funcionando accediendo directamente a:
 - Alternar entre tema claro y oscuro
 - Usar atajos de teclado: Ctrl+K para enfocar el campo de nombre, T para cambiar el tema
 
+### 📽️ VIDEO 
+https://drive.google.com/file/d/1yka9CQKE8rhQ5E5oedp4wXZMrWvVZmFY/view?usp=sharing
 
 ## 🎮 Mis primeros Items (Fase 1)
 

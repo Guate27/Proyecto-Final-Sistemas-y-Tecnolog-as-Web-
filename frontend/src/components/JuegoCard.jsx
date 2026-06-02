@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { CATEGORIAS } from '../utils/categorias'
 import ModalEditarJuego from './ModalEditarJuego'
+import EstrellasPuntuacion from './EstrellasPuntuacion'
 
 // Tarjeta individual que muestra los datos de un juego y permite interactuar con él
-function JuegoCard({ juego, onEliminar, onCambiarEstado, onEditar }) {
-
+function JuegoCard({ juego, onEliminar, onCambiarEstado, onEditar, onCalificar }) {
   // Busca la categoría del juego para mostrar su emoji y color
   const categoria = CATEGORIAS.find(c => c.id === juego.categoriaId)
 
@@ -71,6 +71,12 @@ function JuegoCard({ juego, onEliminar, onCambiarEstado, onEditar }) {
       <p style={{ margin: '4px 0', color: 'var(--color-texto)' }}>
         📌 Estado: <strong>{juego.estado}</strong>
       </p>
+
+      {/* Sección de calificación con estrellas */}
+      <EstrellasPuntuacion
+        puntuacion={juego.puntuacion}
+        onCambiar={(valor) => onCalificar(juego.id, valor)}
+      />
 
       {/* Selector de estado */}
       <select

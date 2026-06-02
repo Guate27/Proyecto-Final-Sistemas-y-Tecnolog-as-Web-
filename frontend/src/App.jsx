@@ -9,6 +9,8 @@ import FormularioJuego from './components/FormularioJuego'
 import Filtros from './components/Filtros'
 import Dashboard from './components/Dashboard'
 import ListaJuegos from './components/ListaJuegos'
+import PerfilUsuario from './components/PerfilUsuario'
+
 
 function App() {
   // Funciones para manejar el almacenamiento (API o LocalStorage)
@@ -101,6 +103,21 @@ function App() {
     dispatch({ type: 'EDITAR', payload: juegoEditado })
   }, [actualizarItem])
 
+  // Califica un juego con una puntuación del 1 al 10
+  const calificarJuego = useCallback(async (id, puntuacion) => {
+    const juegoActual = lista.find(j => j.id === id)
+    if (!juegoActual) return
+
+    const juegoActualizado = {
+      ...juegoActual,
+      puntuacion,
+      fechaActividad: new Date().toISOString()
+    }
+
+    await actualizarItem(juegoActualizado)
+    dispatch({ type: 'EDITAR', payload: juegoActualizado })
+  }, [lista, actualizarItem])
+
   // Atajos de teclado: Ctrl+K para poner el cursor en e input, T para cambiar el tema
   useAtajoTeclado('k', () => inputRef.current?.focus(), { ctrl: true })
   useAtajoTeclado('t', toggleTema)
@@ -112,6 +129,7 @@ function App() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
         <h1 style={{ margin: 0 }}>🎮 Mi Backlog Personal</h1>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <PerfilUsuario />
           <span style={{ fontSize: '13px', color: 'var(--color-texto-secundario)' }}>
             ⏱️ Sesión: {tiempoSesion}s
           </span>
@@ -191,6 +209,7 @@ function App() {
         onEliminar={eliminarJuego}
         onCambiarEstado={cambiarEstado}
         onEditar={editarJuego}
+         onCalificar={calificarJuego}
         ultimoJuegoRef={ultimoJuegoRef}
       />
 

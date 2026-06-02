@@ -170,7 +170,7 @@ Se puede comprobar que el backend está funcionando accediendo directamente a:
 - Alternar entre tema claro y oscuro
 - Usar atajos de teclado: Ctrl+K para enfocar el campo de nombre, T para cambiar el tema
 
-### 📽️ VIDEO 
+## 📽️ VIDEO 
 https://drive.google.com/file/d/1yka9CQKE8rhQ5E5oedp4wXZMrWvVZmFY/view?usp=sharing
 
 ## 🎮 Mis primeros Items (Fase 1)

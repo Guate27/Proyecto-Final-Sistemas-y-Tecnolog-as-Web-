@@ -4,7 +4,8 @@ import { CATEGORIAS } from '../utils/categorias'
 
 // Componente que muestra todos los juegos en una grilla de 4 columnas
 // Cada juego aparece dentro de un panel con el header de su categoría
-function ListaJuegos({ juegos, onEliminar, onCambiarEstado, onEditar, ultimoJuegoRef }) {
+function ListaJuegos({ juegos, onEliminar, onCambiarEstado, onEditar, onCalificar, ultimoJuegoRef }) {
+
 
   // Ordena los juegos por fecha de actividad descendente
   // Los juegos con interacción más reciente aparecen primero
@@ -73,6 +74,7 @@ function ListaJuegos({ juegos, onEliminar, onCambiarEstado, onEditar, ultimoJueg
                 onEliminar={onEliminar}
                 onCambiarEstado={onCambiarEstado}
                 onEditar={onEditar}
+                onCalificar={onCalificar}
                 ref={index === 0 ? ultimoJuegoRef : null}
               />
             </div>
